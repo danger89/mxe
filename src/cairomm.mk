@@ -3,8 +3,8 @@
 PKG             := cairomm
 $(PKG)_WEBSITE  := https://cairographics.org/cairomm/
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.11.2
-$(PKG)_CHECKSUM := ccf677098c1e08e189add0bd146f78498109f202575491a82f1815b6bc28008d
+$(PKG)_VERSION  := 1.13.1
+$(PKG)_CHECKSUM := 97a78bd7de6baf8af3da1f9b39f1317f8da9f1145b7694e928fbd5521da08ef6
 $(PKG)_SUBDIR   := cairomm-$($(PKG)_VERSION)
 $(PKG)_FILE     := cairomm-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := https://cairographics.org/releases/$($(PKG)_FILE)
