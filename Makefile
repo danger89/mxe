@@ -128,6 +128,12 @@ MXE_CONFIGURE_OPTS = \
         --disable-static --enable-shared ) \
     $(MXE_DISABLE_DOC_OPTS)
 
+MXE_MESON_OPTIONS = \
+   --buildtype=release \
+   --prefix='$(PREFIX)/$(TARGET)' \
+   --default-library=static \
+   --libdir=lib
+
 PKG_CONFIGURE_OPTS = \
     $(_$(PKG)_CONFIGURE_OPTS) \
     $($(PKG)_CONFIGURE_OPTS)
