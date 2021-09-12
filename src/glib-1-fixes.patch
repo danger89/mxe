@@ -3,30 +3,6 @@ This file is part of MXE. See LICENSE.md for licensing information.
 Contains ad hoc patches for cross building.
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Mark Brand <mabrand@mabrand.nl>
-Date: Thu, 23 Sep 2010 21:42:46 +0200
-Subject: [PATCH 01/10] fix tool paths
-
-
-diff --git a/glib-2.0.pc.in b/glib-2.0.pc.in
-index 1111111..2222222 100644
---- a/glib-2.0.pc.in
-+++ b/glib-2.0.pc.in
-@@ -3,9 +3,9 @@ exec_prefix=@exec_prefix@
- libdir=@libdir@
- includedir=@includedir@
- 
--glib_genmarshal=glib-genmarshal
--gobject_query=gobject-query
--glib_mkenums=glib-mkenums
-+glib_genmarshal=@bindir@/glib-genmarshal
-+gobject_query=@bindir@/gobject-query
-+glib_mkenums=@bindir@/glib-mkenums
- 
- Name: GLib
- Description: C Utility Library
-
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Hans Petter Jansson <hpj@cl.no>
 Date: Fri, 15 Jun 2012 15:25:01 +0200
 Subject: [PATCH 02/10] Avoid DllMain symbol conflict when linking statically
