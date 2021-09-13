@@ -52,9 +52,9 @@ endef
 
 define $(PKG)_BUILD_NATIVE
     # native build for glib-tools
-    cd '$(SOURCE_DIR)' && meson $(MXE_MESON_OPTIONS) _build .
-    cd '$(BUILD_DIR)' && ninja -C _build
-    cd '$(BUILD_DIR)' && ninja -C _build install
+    cd '$(SOURCE_DIR)' && meson $(MXE_MESON_OPTIONS) _build . && \
+    ninja -C _build && \
+    ninja -C _build install
 
     # OLD:
     #cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
