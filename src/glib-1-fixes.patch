@@ -135,13 +135,14 @@ diff --git a/gio-2.0.pc.in b/gio-2.0.pc.in
 index 1111111..2222222 100644
 --- a/gio-2.0.pc.in
 +++ b/gio-2.0.pc.in
-@@ -13,5 +13,5 @@ Description: glib I/O library
+@@ -16,6 +16,6 @@ Description: glib I/O library
  Version: @VERSION@
- Requires.private: @PCRE_REQUIRES@
--Libs: -L${libdir} -lglib-2.0 @INTLLIBS@
-+Libs: -L${libdir} -lglib-2.0 @INTLLIBS@ -ldnsapi -liphlpapi
- Libs.private: @G_THREAD_LIBS@ @G_LIBS_EXTRA@ @PCRE_LIBS@ @INTLLIBS@ @ICONV_LIBS@ @CARBON_LIBS@ @COCOA_LIBS@
- Cflags: -I${includedir}/glib-2.0 -I${libdir}/glib-2.0/include @GLIB_EXTRA_CFLAGS@
+ Requires: glib-2.0 gobject-2.0
+ Requires.private: gmodule-no-export-2.0 @LIBMOUNT_REQUIRES@
+-Libs: -L${libdir} -lgio-2.0
++Libs: -L${libdir} -lgio-2.0 -ldnsapi -liphlpapi
+ Libs.private: @ZLIB_LIBS@ @NETWORK_LIBS@ @SELINUX_LIBS@ @COCOA_LIBS@ @CARBON_LIBS@
+ Cflags:
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Gerardo Ballabio <gerardo.ballabio@gmail.com>
