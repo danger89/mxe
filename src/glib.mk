@@ -4,15 +4,15 @@ PKG             := glib
 $(PKG)_WEBSITE  := https://gtk.org/
 $(PKG)_DESCR    := GLib
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.58.3
-$(PKG)_CHECKSUM := 8f43c31767e88a25da72b52a40f3301fefc49a665b56dc10ee7cc9565cbe7481
+$(PKG)_VERSION  := 2.68.4
+$(PKG)_CHECKSUM := 62fd061d08a75492617e625a73e2c05e259f831acbb8e1f8b9c81f23f7993a3b
 $(PKG)_SUBDIR   := glib-$($(PKG)_VERSION)
 $(PKG)_FILE     := glib-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://download.gnome.org/sources/glib/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc dbus gettext libffi libiconv pcre zlib $(BUILD)~$(PKG)
 $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
-
-$(PKG)_DEPS_$(BUILD) := autotools gettext libffi libiconv zlib
+# Needs meson bulds now
+$(PKG)_DEPS_$(BUILD) := gettext libffi libiconv zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://gitlab.gnome.org/GNOME/glib/tags' | \
@@ -52,32 +52,36 @@ endef
 
 define $(PKG)_BUILD_NATIVE
     # native build for glib-tools
-    cd '$(SOURCE_DIR)' && NOCONFIGURE=true ./autogen.sh
-    cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
-        $(MXE_CONFIGURE_OPTS) \
-        --enable-regex \
-        --disable-threads \
-        --disable-selinux \
-        --disable-inotify \
-        --disable-fam \
-        --disable-xattr \
-        --disable-dtrace \
-        --disable-libmount \
-        --with-libiconv=gnu \
-        --with-pcre=internal \
-        PKG_CONFIG='$(PREFIX)/$(TARGET)/bin/pkgconf' \
-        CPPFLAGS='-I$(PREFIX)/$(TARGET)/include' \
-        LDFLAGS='-L$(PREFIX)/$(TARGET)/lib'
-    $(SED) -i 's,#define G_ATOMIC.*,,' '$(BUILD_DIR)/config.h'
-    $(MAKE) -C '$(BUILD_DIR)/glib'    -j '$(JOBS)'
-    $(MAKE) -C '$(BUILD_DIR)/gthread' -j '$(JOBS)'
-    $(MAKE) -C '$(BUILD_DIR)/gmodule' -j '$(JOBS)'
-    $(MAKE) -C '$(BUILD_DIR)/gobject' -j '$(JOBS)' lib_LTLIBRARIES= install-exec
-    $(MAKE) -C '$(BUILD_DIR)/gio/xdgmime'     -j '$(JOBS)'
-    $(MAKE) -C '$(BUILD_DIR)/gio'     -j '$(JOBS)' glib-compile-schemas
-    $(MAKE) -C '$(BUILD_DIR)/gio'     -j '$(JOBS)' glib-compile-resources
-    $(INSTALL) -m755 '$(BUILD_DIR)/gio/glib-compile-schemas' '$(PREFIX)/$(TARGET)/bin/'
-    $(INSTALL) -m755 '$(BUILD_DIR)/gio/glib-compile-resources' '$(PREFIX)/$(TARGET)/bin/'
+    cd '$(SOURCE_DIR)' && meson $(MXE_MESON_OPTIONS) _build .
+    cd '$(BUILD_DIR)' && ninja -C _build
+    cd '$(BUILD_DIR)' && ninja -C _build install
+
+    # OLD:
+    #cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
+    #    $(MXE_CONFIGURE_OPTS) \
+    #    --enable-regex \
+    #    --disable-threads \
+    #    --disable-selinux \
+    #    --disable-inotify \
+    #    --disable-fam \
+    #    --disable-xattr \
+    #    --disable-dtrace \
+    #    --disable-libmount \
+    #    --with-libiconv=gnu \
+    #    --with-pcre=internal \
+    #    PKG_CONFIG='$(PREFIX)/$(TARGET)/bin/pkgconf' \
+    #    CPPFLAGS='-I$(PREFIX)/$(TARGET)/include' \
+    #    LDFLAGS='-L$(PREFIX)/$(TARGET)/lib'
+    #$(SED) -i 's,#define G_ATOMIC.*,,' '$(BUILD_DIR)/config.h'
+    #$(MAKE) -C '$(BUILD_DIR)/glib'    -j '$(JOBS)'
+    #$(MAKE) -C '$(BUILD_DIR)/gthread' -j '$(JOBS)'
+    #$(MAKE) -C '$(BUILD_DIR)/gmodule' -j '$(JOBS)'
+    #$(MAKE) -C '$(BUILD_DIR)/gobject' -j '$(JOBS)' lib_LTLIBRARIES= install-exec
+    #$(MAKE) -C '$(BUILD_DIR)/gio/xdgmime'     -j '$(JOBS)'
+    #$(MAKE) -C '$(BUILD_DIR)/gio'     -j '$(JOBS)' glib-compile-schemas
+    #$(MAKE) -C '$(BUILD_DIR)/gio'     -j '$(JOBS)' glib-compile-resources
+    #$(INSTALL) -m755 '$(BUILD_DIR)/gio/glib-compile-schemas' '$(PREFIX)/$(TARGET)/bin/'
+    #$(INSTALL) -m755 '$(BUILD_DIR)/gio/glib-compile-resources' '$(PREFIX)/$(TARGET)/bin/'
 endef
 
 define $(PKG)_BUILD_$(BUILD)
