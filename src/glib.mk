@@ -23,31 +23,35 @@ endef
 
 define $(PKG)_BUILD_DARWIN
     # native build for glib-tools
-    cd '$(SOURCE_DIR)' && NOCONFIGURE=true ./autogen.sh
-    cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
-        $(MXE_CONFIGURE_OPTS) \
-        --enable-regex \
-        --disable-threads \
-        --disable-selinux \
-        --disable-inotify \
-        --disable-fam \
-        --disable-xattr \
-        --disable-dtrace \
-        --disable-libmount \
-        --with-pcre=internal \
-        PKG_CONFIG='$(PREFIX)/$(TARGET)/bin/pkgconf' \
-        CPPFLAGS='-I$(PREFIX)/$(TARGET).gnu/include' \
-        LDFLAGS='-L$(PREFIX)/$(TARGET).gnu/lib'
-    $(MAKE) -C '$(BUILD_DIR)/glib'    -j '$(JOBS)'
-    $(MAKE) -C '$(BUILD_DIR)/gthread' -j '$(JOBS)'
-    $(MAKE) -C '$(BUILD_DIR)/gmodule' -j '$(JOBS)'
-    $(MAKE) -C '$(BUILD_DIR)/gobject' -j '$(JOBS)' lib_LTLIBRARIES= install-exec
-    $(MAKE) -C '$(BUILD_DIR)/gio/xdgmime'     -j '$(JOBS)'
-    $(MAKE) -C '$(BUILD_DIR)/gio/kqueue'      -j '$(JOBS)'
-    $(MAKE) -C '$(BUILD_DIR)/gio'     -j '$(JOBS)' glib-compile-schemas
-    $(MAKE) -C '$(BUILD_DIR)/gio'     -j '$(JOBS)' glib-compile-resources
-    $(INSTALL) -m755 '$(BUILD_DIR)/gio/glib-compile-schemas' '$(PREFIX)/$(TARGET)/bin/'
-    $(INSTALL) -m755 '$(BUILD_DIR)/gio/glib-compile-resources' '$(PREFIX)/$(TARGET)/bin/'
+    cd '$(SOURCE_DIR)' && meson $(MXE_MESON_OPTIONS) _build . && \
+    ninja -C _build && \
+    ninja -C _build install
+
+    #cd '$(SOURCE_DIR)' && NOCONFIGURE=true ./autogen.sh
+    #cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
+    #    $(MXE_CONFIGURE_OPTS) \
+    #    --enable-regex \
+    #    --disable-threads \
+    #    --disable-selinux \
+    #    --disable-inotify \
+    #    --disable-fam \
+    #    --disable-xattr \
+    #    --disable-dtrace \
+    #    --disable-libmount \
+    #    --with-pcre=internal \
+    #    PKG_CONFIG='$(PREFIX)/$(TARGET)/bin/pkgconf' \
+    #    CPPFLAGS='-I$(PREFIX)/$(TARGET).gnu/include' \
+    #    LDFLAGS='-L$(PREFIX)/$(TARGET).gnu/lib'
+    #$(MAKE) -C '$(BUILD_DIR)/glib'    -j '$(JOBS)'
+    #$(MAKE) -C '$(BUILD_DIR)/gthread' -j '$(JOBS)'
+    #$(MAKE) -C '$(BUILD_DIR)/gmodule' -j '$(JOBS)'
+    #$(MAKE) -C '$(BUILD_DIR)/gobject' -j '$(JOBS)' lib_LTLIBRARIES= install-exec
+    #$(MAKE) -C '$(BUILD_DIR)/gio/xdgmime'     -j '$(JOBS)'
+    #$(MAKE) -C '$(BUILD_DIR)/gio/kqueue'      -j '$(JOBS)'
+    #$(MAKE) -C '$(BUILD_DIR)/gio'     -j '$(JOBS)' glib-compile-schemas
+    #$(MAKE) -C '$(BUILD_DIR)/gio'     -j '$(JOBS)' glib-compile-resources
+    #$(INSTALL) -m755 '$(BUILD_DIR)/gio/glib-compile-schemas' '$(PREFIX)/$(TARGET)/bin/'
+    #$(INSTALL) -m755 '$(BUILD_DIR)/gio/glib-compile-resources' '$(PREFIX)/$(TARGET)/bin/'
 endef
 
 define $(PKG)_BUILD_NATIVE
@@ -98,7 +102,7 @@ define $(PKG)_BUILD
     ln -sf '$(PREFIX)/$(BUILD)/bin/glib-compile-resources' '$(PREFIX)/$(TARGET)/bin/'
 
     # cross build
-    cd '$(SOURCE_DIR)' && ./tools/meson-toolchain.sh $(PREFIX) $(TARGET) > ./cross-compile.ini && \
+    cd '$(SOURCE_DIR)' && $(PWD)/tools/meson-toolchain.sh $(PREFIX) $(TARGET) > ./cross-compile.ini && \
     meson $(MXE_MESON_OPTIONS) --cross-file=./cross-compile.ini _build . && \
     ninja -C _build && \
     ninja -C _build install
