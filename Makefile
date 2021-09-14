@@ -131,8 +131,10 @@ MXE_CONFIGURE_OPTS = \
 MXE_MESON_OPTIONS = \
    --buildtype=release \
    --prefix='$(PREFIX)/$(TARGET)' \
-   --default-library=static \
-   --libdir=lib
+   --libdir=lib \
+    $(if $(BUILD_STATIC), \
+        --default-library=static , \
+        --default-library=shared )
 
 PKG_CONFIGURE_OPTS = \
     $(_$(PKG)_CONFIGURE_OPTS) \

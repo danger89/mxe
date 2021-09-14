@@ -98,24 +98,30 @@ define $(PKG)_BUILD
     ln -sf '$(PREFIX)/$(BUILD)/bin/glib-compile-resources' '$(PREFIX)/$(TARGET)/bin/'
 
     # cross build
-    cd '$(SOURCE_DIR)' && NOCONFIGURE=true ./autogen.sh
-    cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
-        $(MXE_CONFIGURE_OPTS) \
-        --with-threads=win32 \
-        --with-pcre=system \
-        --with-libiconv=gnu \
-        --disable-inotify \
-        CXX='$(TARGET)-g++' \
-        PKG_CONFIG='$(PREFIX)/bin/$(TARGET)-pkg-config' \
-        CFLAGS='-Wno-incompatible-pointer-types -Wno-deprecated-declarations -Wno-format' \
-        GLIB_GENMARSHAL='$(PREFIX)/$(TARGET)/bin/glib-genmarshal' \
-        GLIB_COMPILE_SCHEMAS='$(PREFIX)/$(TARGET)/bin/glib-compile-schemas' \
-        GLIB_COMPILE_RESOURCES='$(PREFIX)/$(TARGET)/bin/glib-compile-resources'
-    $(MAKE) -C '$(BUILD_DIR)/glib'    -j '$(JOBS)' install sbin_PROGRAMS= noinst_PROGRAMS=
-    $(MAKE) -C '$(BUILD_DIR)/gmodule' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
-    $(MAKE) -C '$(BUILD_DIR)/gthread' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
-    $(MAKE) -C '$(BUILD_DIR)/gobject' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
-    $(MAKE) -C '$(BUILD_DIR)/gio'     -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= MISC_STUFF=
-    $(MAKE) -C '$(BUILD_DIR)'         -j '$(JOBS)' install-pkgconfigDATA
-    $(MAKE) -C '$(BUILD_DIR)/m4macros' install
+    cd '$(SOURCE_DIR)' && ./tools/meson-toolchain.sh $(PREFIX) $(TARGET) > ./cross-compile.ini && \
+    meson $(MXE_MESON_OPTIONS) --cross-file=./cross-compile.ini _build . && \
+    ninja -C _build && \
+    ninja -C _build install
+
+
+    #cd '$(SOURCE_DIR)' && NOCONFIGURE=true ./autogen.sh
+    #cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
+    #    $(MXE_CONFIGURE_OPTS) \
+    #    --with-threads=win32 \
+    #    --with-pcre=system \
+    #    --with-libiconv=gnu \
+    #    --disable-inotify \
+    #    CXX='$(TARGET)-g++' \
+    #    PKG_CONFIG='$(PREFIX)/bin/$(TARGET)-pkg-config' \
+    #    CFLAGS='-Wno-incompatible-pointer-types -Wno-deprecated-declarations -Wno-format' \
+    #    GLIB_GENMARSHAL='$(PREFIX)/$(TARGET)/bin/glib-genmarshal' \
+    #    GLIB_COMPILE_SCHEMAS='$(PREFIX)/$(TARGET)/bin/glib-compile-schemas' \
+    #    GLIB_COMPILE_RESOURCES='$(PREFIX)/$(TARGET)/bin/glib-compile-resources'
+    #$(MAKE) -C '$(BUILD_DIR)/glib'    -j '$(JOBS)' install sbin_PROGRAMS= noinst_PROGRAMS=
+    #$(MAKE) -C '$(BUILD_DIR)/gmodule' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+    #$(MAKE) -C '$(BUILD_DIR)/gthread' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+    #$(MAKE) -C '$(BUILD_DIR)/gobject' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+    #$(MAKE) -C '$(BUILD_DIR)/gio'     -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= MISC_STUFF=
+    #$(MAKE) -C '$(BUILD_DIR)'         -j '$(JOBS)' install-pkgconfigDATA
+    #$(MAKE) -C '$(BUILD_DIR)/m4macros' install
 endef

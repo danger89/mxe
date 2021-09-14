@@ -20,8 +20,8 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && ./tools/meson-toolchain.sh windows64 > ./cross-compile.txt && \
-    meson $(MXE_MESON_OPTIONS) --cross-file=./cross-compile.txt _build .
+    cd '$(SOURCE_DIR)' && ./tools/meson-toolchain.sh $(PREFIX) $(TARGET) > ./cross-compile.ini && \
+    meson $(MXE_MESON_OPTIONS) --cross-file=./cross-compile.ini _build .
     ninja -C _build
     ninja -C _build install
 
