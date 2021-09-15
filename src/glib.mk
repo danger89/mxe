@@ -96,6 +96,7 @@ endef
 
 define $(PKG)_BUILD
     # other packages expect glib-tools in $(TARGET)/bin
+    # Q: Still needed?
     rm -f  '$(PREFIX)/$(TARGET)/bin/glib-*'
     ln -sf '$(PREFIX)/$(BUILD)/bin/glib-genmarshal'        '$(PREFIX)/$(TARGET)/bin/'
     ln -sf '$(PREFIX)/$(BUILD)/bin/glib-compile-schemas'   '$(PREFIX)/$(TARGET)/bin/'
