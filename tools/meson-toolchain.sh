@@ -3,7 +3,7 @@
 # Adapted by Melroy van den Berg
 #
 # Usage:
-# ./tools/meson-toolchain.sh $(PREFIX) $(TARGET)
+# $(PWD)/tools/meson-toolchain.sh $(PREFIX) $(TARGET)
 #
 # Fist parameter is the prefix path,
 # Seconf parameter is the platform for cross-compiling.
