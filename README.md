@@ -46,6 +46,13 @@ various target platforms, which:
 
 Please see [mxe.cc](https://mxe.cc/) for further information and package support matrix.
 
+TODO: Add to the mxe.cc site. Additional packages may be needed since newer version of GTK requires additional packages:
+
+* meson
+* ninja-build
+* libgirepository1.0-dev
+
+
 ## Shared Library Notes
 There are several approaches to recursively finding DLL dependencies (alphabetical list):
   * [go script](https://github.com/desertbit/gml/blob/master/cmd/gml-copy-dlls/main.go)
