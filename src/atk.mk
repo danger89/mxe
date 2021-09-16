@@ -4,13 +4,13 @@ PKG             := atk
 $(PKG)_WEBSITE  := https://gtk.org/
 $(PKG)_DESCR    := ATK
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.34.1
-$(PKG)_CHECKSUM := d4f0e3b3d21265fcf2bc371e117da51c42ede1a71f6db1c834e6976bb20997cb
+$(PKG)_VERSION  := 2.36.0
+$(PKG)_CHECKSUM := fb76247e369402be23f1f5c65d38a9639c1164d934e40f6a9cf3c9e96b652788
 $(PKG)_SUBDIR   := atk-$($(PKG)_VERSION)
 $(PKG)_FILE     := atk-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://download.gnome.org/sources/atk/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
-# Also need meson & ninja now
-$(PKG)_DEPS     := cc gettext glib
+# Also need meson & ninja and gobject-introspection ..
+$(PKG)_DEPS     := glib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://gitlab.gnome.org/GNOME/atk/tags' | \

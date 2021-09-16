@@ -22,8 +22,8 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD_DARWIN
-    # native build for glib-tools
-    cd '$(SOURCE_DIR)' && meson $(MXE_MESON_OPTIONS) _build . && \
+    # native build
+    cd '$(SOURCE_DIR)' && meson $(MXE_MESON_OPTIONS) -Dtests=false _build . && \
     ninja -C _build && \
     ninja -C _build install
 
@@ -55,8 +55,8 @@ define $(PKG)_BUILD_DARWIN
 endef
 
 define $(PKG)_BUILD_NATIVE
-    # native build for glib-tools
-    cd '$(SOURCE_DIR)' && meson $(MXE_MESON_OPTIONS) _build . && \
+    # native build
+    cd '$(SOURCE_DIR)' && meson $(MXE_MESON_OPTIONS) -Dtests=false _build . && \
     ninja -C _build && \
     ninja -C _build install
 
@@ -102,12 +102,11 @@ define $(PKG)_BUILD
     ln -sf '$(PREFIX)/$(BUILD)/bin/glib-compile-schemas'   '$(PREFIX)/$(TARGET)/bin/'
     ln -sf '$(PREFIX)/$(BUILD)/bin/glib-compile-resources' '$(PREFIX)/$(TARGET)/bin/'
 
-    # cross build
+    # cross build with posix threads
     cd '$(SOURCE_DIR)' && $(PWD)/tools/meson-toolchain.sh $(PREFIX) $(TARGET) > ./cross-compile.ini && \
-    meson $(MXE_MESON_OPTIONS) --cross-file=./cross-compile.ini _build . && \
+    meson $(MXE_MESON_OPTIONS) -Dtests=false -Dthreads=true --cross-file=./cross-compile.ini _build . && \
     ninja -C _build && \
     ninja -C _build install
-
 
     #cd '$(SOURCE_DIR)' && NOCONFIGURE=true ./autogen.sh
     #cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
