@@ -48,8 +48,9 @@ Please see [mxe.cc](https://mxe.cc/) for further information and package support
 
 TODO: Add to the mxe.cc site. Additional packages may be needed since newer version of GTK requires additional packages:
 
-* meson
+* meson (new version => 0.55. eg via PPA: https://launchpad.net/~cybermax-dexter/+archive/ubuntu/meson-backport)
 * ninja-build
+* python3-dev
 * libgirepository1.0-dev
 
 
