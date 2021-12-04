@@ -21,7 +21,14 @@ endef
 
 define $(PKG)_BUILD
     # Meson configure, with additional options for GTK
-    $(MXE_MESON_WRAPPER) --buildtype=release -Dtests=false -Dexamples=false -Dbuiltin_immodules=yes -Dintrospection=false '$(BUILD_DIR)' '$(SOURCE_DIR)' && \
+    $(MXE_MESON_WRAPPER) --buildtype=release \
+        -Dtests=false \
+        -Dexamples=false \
+        -Ddemos=false \
+        -Dinstalled_tests=false \
+        -Dbuiltin_immodules=yes \
+        -Dintrospection=false \
+        '$(BUILD_DIR)' '$(SOURCE_DIR)' && \
     ninja -C '$(BUILD_DIR)' -j '$(JOBS)' && \
     ninja -C '$(BUILD_DIR)' -j '$(JOBS)' install
 
