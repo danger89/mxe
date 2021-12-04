@@ -128,9 +128,8 @@ MXE_CONFIGURE_OPTS = \
         --disable-static --enable-shared ) \
     $(MXE_DISABLE_DOC_OPTS)
 
-MXE_MESON_WRAPPER = $(PREFIX)/bin/$(TARGET)-meson
-
-MXE_MESON_NATIVE_WRAPPER = $(PREFIX)/bin/$(TARGET)-native-meson
+MXE_MESON_WRAPPER = '$(PREFIX)/bin/$(TARGET)-meson'
+MXE_MESON_NATIVE_WRAPPER = '$(PREFIX)/bin/mxe-native-meson'
 
 PKG_CONFIGURE_OPTS = \
     $(_$(PKG)_CONFIGURE_OPTS) \

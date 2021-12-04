@@ -4,7 +4,7 @@ PKG              := meson-wrapper
 $(PKG)_VERSION   := 1
 $(PKG)_UPDATE    := echo 1
 $(PKG)_FILE_DEPS := $(wildcard $(PWD)/src/meson-wrapper/conf/*)
-$(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
+$(PKG)_TARGETS   := $(BUILD) $(MXE_TARGETS)
 $(PKG)_DEPS      := cmake-conf
 
 define $(PKG)_BUILD
@@ -34,7 +34,9 @@ define $(PKG)_BUILD
         -DINPUT='$(PWD)/src/meson-wrapper/conf/target-meson.in' \
         -DOUTPUT='$(PREFIX)/bin/$(TARGET)-meson'
     chmod 0755 '$(PREFIX)/bin/$(TARGET)-meson'
+endef
 
+define $(PKG)_BUILD_$(BUILD)
     # create the prefixed Meson wrapper script for native builds
     cmake-configure-file \
         -DLIBTYPE=$(if $(BUILD_SHARED),shared,static) \
@@ -42,6 +44,6 @@ define $(PKG)_BUILD
         -DTARGET=$(TARGET) \
         -DBUILD=$(BUILD) \
         -DINPUT='$(PWD)/src/meson-wrapper/conf/native-meson.in' \
-        -DOUTPUT='$(PREFIX)/bin/$(TARGET)-native-meson'
-    chmod 0755 '$(PREFIX)/bin/$(TARGET)-native-meson'
+        -DOUTPUT='$(PREFIX)/bin/mxe-native-meson'
+    chmod 0755 '$(PREFIX)/bin/mxe-native-meson'
 endef
