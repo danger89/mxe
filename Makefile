@@ -128,9 +128,6 @@ MXE_CONFIGURE_OPTS = \
         --disable-static --enable-shared ) \
     $(MXE_DISABLE_DOC_OPTS)
 
-MXE_MESON_OPTIONS = \
-   --buildtype=release
-
 MXE_MESON_WRAPPER = $(PREFIX)/bin/$(TARGET)-meson
 
 MXE_MESON_NATIVE_WRAPPER = $(PREFIX)/bin/$(TARGET)-native-meson
