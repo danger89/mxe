@@ -11,8 +11,7 @@ $(PKG)_FILE     := glib-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://download.gnome.org/sources/glib/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
 $(PKG)_DEPS     := cc dbus gettext libffi libiconv pcre zlib $(BUILD)~$(PKG)
 $(PKG)_TARGETS  := $(BUILD) $(MXE_TARGETS)
-# Needs meson bulds now
-$(PKG)_DEPS_$(BUILD) := gettext libffi libiconv zlib
+$(PKG)_DEPS_$(BUILD) := meson-wrapper gettext libffi libiconv zlib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://gitlab.gnome.org/GNOME/glib/tags' | \
@@ -23,9 +22,9 @@ endef
 
 define $(PKG)_BUILD_DARWIN
     # native build
-    cd '$(SOURCE_DIR)' && meson $(MXE_MESON_OPTIONS) -Dtests=false _build . && \
-    ninja -C _build && \
-    ninja -C _build install
+    $(MXE_MESON_NATIVE_WRAPPER) --buildtype=release -Dtests=false '$(BUILD_DIR)' '$(SOURCE_DIR)' && \
+    ninja -C '$(BUILD_DIR)' -j '$(JOBS)' && \
+    ninja -C '$(BUILD_DIR)' -j '$(JOBS)' install
 
     #cd '$(SOURCE_DIR)' && NOCONFIGURE=true ./autogen.sh
     #cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
@@ -56,9 +55,9 @@ endef
 
 define $(PKG)_BUILD_NATIVE
     # native build
-    cd '$(SOURCE_DIR)' && meson $(MXE_MESON_OPTIONS) -Dtests=false _build . && \
-    ninja -C _build && \
-    ninja -C _build install
+    $(MXE_MESON_NATIVE_WRAPPER) --buildtype=release -Dtests=false '$(BUILD_DIR)' '$(SOURCE_DIR)' && \
+    ninja -C '$(BUILD_DIR)' -j '$(JOBS)' && \
+    ninja -C '$(BUILD_DIR)' -j '$(JOBS)' install
 
     # OLD:
     #cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
@@ -103,10 +102,9 @@ define $(PKG)_BUILD
     ln -sf '$(PREFIX)/$(BUILD)/bin/glib-compile-resources' '$(PREFIX)/$(TARGET)/bin/'
 
     # cross build with posix threads
-    cd '$(SOURCE_DIR)' && $(PWD)/tools/meson-toolchain.sh $(PREFIX) $(TARGET) > ./cross-compile.ini && \
-    meson $(MXE_MESON_OPTIONS) -Dtests=false -Dthreads=true --cross-file=./cross-compile.ini _build . && \
-    ninja -C _build && \
-    ninja -C _build install
+    $(MXE_MESON_WRAPPER) --buildtype=release -Dtests=false -Dthreads=true '$(BUILD_DIR)' '$(SOURCE_DIR)' && \
+    ninja -C '$(BUILD_DIR)' -j '$(JOBS)' && \
+    ninja -C '$(BUILD_DIR)' -j '$(JOBS)' install
 
     #cd '$(SOURCE_DIR)' && NOCONFIGURE=true ./autogen.sh
     #cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \

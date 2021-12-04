@@ -21,11 +21,10 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(SOURCE_DIR)' && $(PWD)/tools/meson-toolchain.sh $(PREFIX) $(TARGET) > ./cross-compile.ini && \
     # Meson configure, with additional options for GTK
-    meson $(MXE_MESON_OPTIONS) -Dtests=false -Dexamples=false -Dbuiltin_immodules=yes --cross-file=./cross-compile.ini _build . && \
-    ninja -C _build && \
-    ninja -C _build install
+    $(MXE_MESON_WRAPPER) --buildtype=release -Dtests=false -Dexamples=false -Dbuiltin_immodules=yes '$(BUILD_DIR)' '$(SOURCE_DIR)' && \
+    ninja -C '$(BUILD_DIR)' -j '$(JOBS)' && \
+    ninja -C '$(BUILD_DIR)' -j '$(JOBS)' install
 
     #cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
     #    $(MXE_CONFIGURE_OPTS) \
