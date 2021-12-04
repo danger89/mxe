@@ -9,8 +9,8 @@ $(PKG)_CHECKSUM := ba75bfff320ad1f4cfbee92ba813ec336322cc3c660d406aad014b07087a3
 $(PKG)_SUBDIR   := gtk+-$($(PKG)_VERSION)
 $(PKG)_FILE     := gtk+-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://download.gnome.org/sources/gtk+/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
-# also needs gobject-introspection (https://gitlab.gnome.org/GNOME/gobject-introspection) and wayland ?
-$(PKG)_DEPS     := atk cairo gdk-pixbuf gettext glib jasper jpeg libepoxy libpng pango tiff
+# TODO: Also support wayland backend
+$(PKG)_DEPS     := meson-wrapper atk cairo gdk-pixbuf gettext glib jasper jpeg libepoxy libpng pango tiff
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://gitlab.gnome.org/GNOME/gtk+/tags' | \
@@ -43,7 +43,7 @@ define $(PKG)_BUILD
     # TODO: Still relevant to remove?
     rm -f '$(PREFIX)/$(TARGET)/lib/gailutil.def'
 
-    # Just compile our testfile
+    # Just compile our MXE testfile
     '$(TARGET)-gcc' \
         -W -Wall -Werror -ansi \
         '$(TEST_FILE)' -o '$(PREFIX)/$(TARGET)/bin/test-gtk3.exe' \
