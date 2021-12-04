@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 1fd85051da9cb402cc8348cec72dfe4d79f9345df4a1dbf68703a4ded4584
 $(PKG)_SUBDIR   := glibmm-$($(PKG)_VERSION)
 $(PKG)_FILE     := glibmm-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://download.gnome.org/sources/glibmm/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
-$(PKG)_DEPS     := cc glib libsigc++
+$(PKG)_DEPS     := cc meson-wrapper glib libsigc++
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://gitlab.gnome.org/GNOME/glibmm/tags' | \
@@ -19,14 +19,18 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && ./configure \
-        $(MXE_CONFIGURE_OPTS) \
-        CXX='$(TARGET)-g++' \
-        CXXFLAGS='-Wno-deprecated-declarations -Wno-deprecated' \
-        PKG_CONFIG='$(PREFIX)/bin/$(TARGET)-pkg-config' \
-        GLIB_COMPILE_SCHEMAS='$(PREFIX)/$(TARGET)/bin/glib-compile-schemas' \
-        $(shell [ `uname -s` == Darwin ] && echo "PERL=/usr/bin/perl") \
-        MAKE=$(MAKE)
-    $(MAKE) -C '$(1)/gio/src' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= MISC_STUFF=
-    $(MAKE) -C '$(1)'         -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+    $(MXE_MESON_WRAPPER) --buildtype=release -Dbuild-examples=false '$(BUILD_DIR)' '$(SOURCE_DIR)' && \
+    ninja -C '$(BUILD_DIR)' -j '$(JOBS)' && \
+    ninja -C '$(BUILD_DIR)' -j '$(JOBS)' install
+
+    #cd '$(1)' && ./configure \
+    #    $(MXE_CONFIGURE_OPTS) \
+    #    CXX='$(TARGET)-g++' \
+    #    CXXFLAGS='-Wno-deprecated-declarations -Wno-deprecated' \
+    #    PKG_CONFIG='$(PREFIX)/bin/$(TARGET)-pkg-config' \
+    #    GLIB_COMPILE_SCHEMAS='$(PREFIX)/$(TARGET)/bin/glib-compile-schemas' \
+    #    $(shell [ `uname -s` == Darwin ] && echo "PERL=/usr/bin/perl") \
+    #    MAKE=$(MAKE)
+    #$(MAKE) -C '$(1)/gio/src' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= MISC_STUFF=
+    #$(MAKE) -C '$(1)'         -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 endef

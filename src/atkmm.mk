@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := 4c4cfc917fd42d3879ce997b463428d6982affa0fb660cafcc0bc2d9afced
 $(PKG)_SUBDIR   := atkmm-$($(PKG)_VERSION)
 $(PKG)_FILE     := atkmm-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://download.gnome.org/sources/atkmm/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
-$(PKG)_DEPS     := cc atk glibmm
+$(PKG)_DEPS     := cc meson-wrapper atk glibmm
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://gitlab.gnome.org/GNOME/atkmm/tags' | \
@@ -18,9 +18,7 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(1)' && ./configure \
-        $(MXE_CONFIGURE_OPTS) \
-        MAKE=$(MAKE)
-    $(MAKE) -C '$(1)' -j '$(JOBS)' bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
-    $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+    $(MXE_MESON_WRAPPER) --buildtype=release '$(BUILD_DIR)' '$(SOURCE_DIR)' && \
+    ninja -C '$(BUILD_DIR)' -j '$(JOBS)' && \
+    ninja -C '$(BUILD_DIR)' -j '$(JOBS)' install
 endef
