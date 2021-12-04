@@ -9,8 +9,7 @@ $(PKG)_CHECKSUM := fb76247e369402be23f1f5c65d38a9639c1164d934e40f6a9cf3c9e96b652
 $(PKG)_SUBDIR   := atk-$($(PKG)_VERSION)
 $(PKG)_FILE     := atk-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://download.gnome.org/sources/atk/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
-# Also need meson (and ninja)
-$(PKG)_DEPS     := glib gobject-introspection
+$(PKG)_DEPS     := meson-wrapper glib gobject-introspection
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://gitlab.gnome.org/GNOME/atk/tags' | \
@@ -20,10 +19,9 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    cd '$(SOURCE_DIR)' && $(PWD)/tools/meson-toolchain.sh $(PREFIX) $(TARGET) > ./cross-compile.ini && \
-    meson $(MXE_MESON_OPTIONS) --cross-file=./cross-compile.ini _build . && \
-    ninja -C _build && \
-    ninja -C _build install
+    $(MXE_MESON_WRAPPER) --buildtype=release -Dtests=false '$(BUILD_DIR)' '$(SOURCE_DIR)' && \
+    ninja -C '$(BUILD_DIR)' -j '$(JOBS)' && \
+    ninja -C '$(BUILD_DIR)' -j '$(JOBS)' install
 
     # OLD:
     #cd '$(1)' && ./configure \
