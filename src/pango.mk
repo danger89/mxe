@@ -4,8 +4,8 @@ PKG             := pango
 $(PKG)_WEBSITE  := https://www.pango.org/
 $(PKG)_DESCR    := Pango
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.41.1
-$(PKG)_CHECKSUM := 1353a4cf5227299294955d0c6232326b346b087ebac6496241d54ca5d2e2abc3
+$(PKG)_VERSION  := 1.50.0
+$(PKG)_CHECKSUM := dba8b62ddf86e10f73f93c3d2256b73238b2bcaf87037ca229b40bdc040eb3f3
 $(PKG)_SUBDIR   := pango-$($(PKG)_VERSION)
 $(PKG)_FILE     := pango-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://download.gnome.org/sources/pango/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
@@ -18,13 +18,17 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    rm '$(1)'/docs/Makefile.am
-    cd '$(1)' && NOCONFIGURE=1 ./autogen.sh
-    cd '$(1)' && ./configure \
-        $(MXE_CONFIGURE_OPTS) \
-        --enable-explicit-deps \
-        --with-included-modules \
-        --without-dynamic-modules \
-        CXX='$(TARGET)-g++'
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
+    $(MXE_MESON_WRAPPER) --buildtype=release -Dintrospection=disabled '$(BUILD_DIR)' '$(SOURCE_DIR)' && \
+    ninja -C '$(BUILD_DIR)' -j '$(JOBS)' && \
+    ninja -C '$(BUILD_DIR)' -j '$(JOBS)' install
+
+    #rm '$(1)'/docs/Makefile.am
+    #cd '$(1)' && NOCONFIGURE=1 ./autogen.sh
+    #cd '$(1)' && ./configure \
+    #    $(MXE_CONFIGURE_OPTS) \
+    #    --enable-explicit-deps \
+    #    --with-included-modules \
+    #    --without-dynamic-modules \
+    #    CXX='$(TARGET)-g++'
+    #$(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 endef

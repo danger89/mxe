@@ -13,22 +13,24 @@ diff --git a/include/epoxy/gl.h b/include/epoxy/gl.h
 index 1111111..2222222 100644
 --- a/include/epoxy/gl.h
 +++ b/include/epoxy/gl.h
-@@ -71,7 +71,17 @@ extern "C" {
+@@ -71,8 +71,19 @@
+ #define GLAPI extern
  #endif
- 
- #ifndef EPOXY_IMPORTEXPORT
--#define EPOXY_IMPORTEXPORT __declspec(dllimport)
+
+-#define KHRONOS_APIENTRY __stdcall
+-#define KHRONOS_APICALL __declspec(dllimport) __stdcall
 +#  ifdef EPOXY_SHARED
++#    define KHRONOS_APIENTRY __stdcall
 +#    ifdef EPOXY_DLL
-+#      define EPOXY_IMPORTEXPORT __declspec(dllexport)
++#      define KHRONOS_APICALL __declspec(dllexport)
 +#    else
-+#      define EPOXY_IMPORTEXPORT __declspec(dllimport)
++#      define KHRONOS_APICALL __declspec(dllimport)
 +#    endif
 +#  elif EPOXY_STATIC
-+#    define EPOXY_IMPORTEXPORT
++#    define KHRONOS_APIENTRY
++#    define KHRONOS_APICALL
 +#  else
 +#    error "Please define EPOXY_STATIC or EPOXY_SHARED"
 +#  endif
- #endif
- 
- #ifndef GLAPI
+
+ #endif /* _WIN32 */
