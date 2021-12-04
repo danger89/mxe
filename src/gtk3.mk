@@ -21,7 +21,7 @@ endef
 
 define $(PKG)_BUILD
     # Erase post-install script, since it throws errors
-    echo > '$(SOURCE_DIR)/build-aux/meson/post-install.py'
+    echo '#!/bin/true' > '$(SOURCE_DIR)/build-aux/meson/post-install.py'
     # Meson configure, with additional options for GTK
     $(MXE_MESON_WRAPPER) --buildtype=release \
         -Dtests=false \
