@@ -20,8 +20,6 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    # Erase post-install script, since it throws errors
-    echo '#!/bin/true' > '$(SOURCE_DIR)/build-aux/meson/post-install.py'
     # Meson configure, with additional options for GTK
     $(MXE_MESON_WRAPPER) --buildtype=release \
         -Dtests=false \
@@ -32,7 +30,7 @@ define $(PKG)_BUILD
         -Dintrospection=false \
         '$(BUILD_DIR)' '$(SOURCE_DIR)' && \
     ninja -C '$(BUILD_DIR)' -j '$(JOBS)' && \
-    ninja -C '$(BUILD_DIR)' -j '$(JOBS)' install
+    DESTDIR='$(PREFIX)' ninja -C '$(BUILD_DIR)' -j '$(JOBS)' install
 
     #cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
     #    $(MXE_CONFIGURE_OPTS) \

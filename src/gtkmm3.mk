@@ -26,7 +26,7 @@ define $(PKG)_BUILD
         -Dbuild-demos=false \
         '$(BUILD_DIR)' '$(SOURCE_DIR)' && \
     ninja -C '$(BUILD_DIR)' -j '$(JOBS)' && \
-    ninja -C '$(BUILD_DIR)' -j '$(JOBS)' install
+    DESTDIR='$(PREFIX)' ninja -C '$(BUILD_DIR)' -j '$(JOBS)' install
 
     #cd '$(1)' && ./configure \
     #    $(MXE_CONFIGURE_OPTS) \
