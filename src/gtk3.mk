@@ -30,8 +30,8 @@ define $(PKG)_BUILD
         -Dintrospection=false \
         '$(BUILD_DIR)' '$(SOURCE_DIR)' && \
     ninja -C '$(BUILD_DIR)' -j '$(JOBS)' && \
-    DESTDIR="$(PREFIX)" \
-    ninja -C '$(BUILD_DIR)' -j '$(JOBS)' install
+    DESTDIR="/" \
+        ninja -C '$(BUILD_DIR)' -j '$(JOBS)' install
 
     #cd '$(BUILD_DIR)' && '$(SOURCE_DIR)/configure' \
     #    $(MXE_CONFIGURE_OPTS) \
