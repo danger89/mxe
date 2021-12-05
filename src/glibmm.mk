@@ -4,8 +4,8 @@ PKG             := glibmm
 $(PKG)_WEBSITE  := https://www.gtkmm.org/
 $(PKG)_DESCR    := GLibmm
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 2.50.1
-$(PKG)_CHECKSUM := 1fd85051da9cb402cc8348cec72dfe4d79f9345df4a1dbf68703a4ded45846a4
+$(PKG)_VERSION  := 2.70.0
+$(PKG)_CHECKSUM := 8008fd8aeddcc867a3f97f113de625f6e96ef98cf7860379813a9c0feffdb520
 $(PKG)_SUBDIR   := glibmm-$($(PKG)_VERSION)
 $(PKG)_FILE     := glibmm-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://download.gnome.org/sources/glibmm/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
@@ -19,7 +19,9 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    $(MXE_MESON_WRAPPER) --buildtype=release -Dbuild-examples=false '$(BUILD_DIR)' '$(SOURCE_DIR)' && \
+    $(MXE_MESON_WRAPPER) --buildtype=release \
+        -Dbuild-examples=false \
+        '$(BUILD_DIR)' '$(SOURCE_DIR)' && \
     ninja -C '$(BUILD_DIR)' -j '$(JOBS)' && \
     ninja -C '$(BUILD_DIR)' -j '$(JOBS)' install
 

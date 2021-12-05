@@ -18,7 +18,9 @@ define $(PKG)_UPDATE
 endef
 
 define $(PKG)_BUILD
-    $(MXE_MESON_WRAPPER) --buildtype=release -Dintrospection=disabled '$(BUILD_DIR)' '$(SOURCE_DIR)' && \
+    $(MXE_MESON_WRAPPER) --buildtype=release \
+        -Dintrospection=disabled \
+        '$(BUILD_DIR)' '$(SOURCE_DIR)' && \
     ninja -C '$(BUILD_DIR)' -j '$(JOBS)' && \
     ninja -C '$(BUILD_DIR)' -j '$(JOBS)' install
 

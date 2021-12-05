@@ -4,12 +4,12 @@ PKG             := gtk3
 $(PKG)_WEBSITE  := https://gtk.org/
 $(PKG)_DESCR    := GTK+
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.24.29
-$(PKG)_CHECKSUM := f57ec4ade8f15cab0c23a80dcaee85b876e70a8823d9105f067ce335a8268caa
+$(PKG)_VERSION  := 3.24.30
+$(PKG)_CHECKSUM := ba75bfff320ad1f4cfbee92ba813ec336322cc3c660d406aad014b07087a3ba9
 $(PKG)_SUBDIR   := gtk+-$($(PKG)_VERSION)
 $(PKG)_FILE     := gtk+-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://download.gnome.org/sources/gtk+/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
-$(PKG)_DEPS     := meson-wrapper atk cairo gdk-pixbuf gettext glib jasper jpeg libepoxy libpng pango tiff
+$(PKG)_DEPS     := cc meson-wrapper atk cairo gdk-pixbuf gettext glib jasper jpeg libepoxy libpng pango tiff
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://gitlab.gnome.org/GNOME/gtk+/tags' | \

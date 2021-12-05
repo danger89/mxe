@@ -9,7 +9,7 @@ $(PKG)_CHECKSUM := fb76247e369402be23f1f5c65d38a9639c1164d934e40f6a9cf3c9e96b652
 $(PKG)_SUBDIR   := atk-$($(PKG)_VERSION)
 $(PKG)_FILE     := atk-$($(PKG)_VERSION).tar.xz
 $(PKG)_URL      := https://download.gnome.org/sources/atk/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
-$(PKG)_DEPS     := meson-wrapper glib
+$(PKG)_DEPS     := cc meson-wrapper glib
 
 define $(PKG)_UPDATE
     $(WGET) -q -O- 'https://gitlab.gnome.org/GNOME/atk/tags' | \
