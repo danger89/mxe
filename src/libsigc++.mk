@@ -8,6 +8,7 @@ $(PKG)_CHECKSUM := bfbe91c0d094ea6bbc6cbd3909b7d98c6561eea8b6d9c0c25add906a6e83d
 $(PKG)_GH_CONF  := libsigcplusplus/libsigcplusplus/releases,,,99,,.tar.xz
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_URL_2    := https://download.gnome.org/sources/libsigc++/$(call SHORT_PKG_VERSION,$(PKG))/libsigc++-$($(PKG)_VERSION).tar.xz
+# TODO: Requires newer g++ compiler with C++14 instead of our very old 'current' default version in MXE
 $(PKG)_DEPS     := cc meson-wrapper
 
 define $(PKG)_BUILD
