@@ -46,13 +46,20 @@ various target platforms, which:
 
 Please see [mxe.cc](https://mxe.cc/) for further information and package support matrix.
 
-TODO: Add to the mxe.cc site. Additional packages may be needed since newer version of GTK requires additional packages:
+## Usage
 
-* meson (new version => 0.55. eg via PPA: https://launchpad.net/~cybermax-dexter/+archive/ubuntu/meson-backport)
-* ninja-build
-* python3-dev
-* libgirepository1.0-dev
+You can use the `make` command to start the build.  
+Below an *example* of cross-compiling the GTK3 project to one statically linked Windows 64-bit executable:
 
+```sh
+make gtk3 -j 8 MXE_TARGETS='x86_64-w64-mingw32.static'
+```
+
+Please see [mxe.cc](https://mxe.cc/) for more information about how-to build the MXE project.
+
+## Packages
+
+Within the [MXE makefiles](src) we either define `$(PKG)_GH_CONF` or `$(PKG)_URL`, which will be used to download the package. Next the checksum will be validated of the downloaded archive file (sha256 checksum).
 
 ## Shared Library Notes
 There are several approaches to recursively finding DLL dependencies (alphabetical list):
