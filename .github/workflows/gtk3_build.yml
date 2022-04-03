@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - gh_actions
   pull_request:
     branches:
       - master
@@ -29,4 +30,4 @@ jobs:
       #- name: Install packages
       #  run: ..
       - name: Build
-        run: make gtk3 gtkmm3 -j 3 MXE_TARGETS='${{ matrix.build-target }} MXE_CCACHE_DIR=~/.ccache PKG_DIR=~/pkg'
+        run: make gtk3 gtkmm3 -j 3 MXE_TARGETS='${{ matrix.build-target }}' MXE_CCACHE_DIR=~/.ccache PKG_DIR=~/pkg
