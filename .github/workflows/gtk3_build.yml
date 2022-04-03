@@ -18,7 +18,7 @@ jobs:
       matrix:
        include:
          - build-target: x86_64-w64-mingw32.shared
-         - build-target: x86_64-w64-mingw32.static
+         #- build-target: x86_64-w64-mingw32.static
     steps:
       - uses: actions/checkout@v3
       - uses: actions/cache@v3
@@ -27,7 +27,7 @@ jobs:
             ~/.ccache
             ~/pkg
           key: cache-${{ runner.build-target }}
-      #- name: Install packages
-      #  run: ..
+      - name: Install package depedencies
+        run: sudo apt-get install autopoint gperf libtool-bin intltool lzip
       - name: Build
         run: make gtk3 gtkmm3 -j 3 MXE_TARGETS='${{ matrix.build-target }}' MXE_CCACHE_DIR=~/.ccache PKG_DIR=~/pkg
