@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - master
-      - gh_actions
+      - gh_action
   pull_request:
     branches:
       - master
