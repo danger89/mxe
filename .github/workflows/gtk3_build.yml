@@ -1,0 +1,32 @@
+name: "GTK3/Gtkmm3 cross-compile 64-bit build"
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: GTK3 build - ${{ matrix.build-target }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+       include:
+         - build-target: x86_64-w64-mingw32.shared
+         - build-target: x86_64-w64-mingw32.static
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.ccache
+            ~/pkg
+          key: cache-${{ runner.build-target }}
+      #- name: Install packages
+      #  run: ..
+      - name: Build
+        run: make gtk3 gtkmm3 -j 3 MXE_TARGETS='${{ matrix.build-target }} MXE_CCACHE_DIR=~/.ccache PKG_DIR=~/pkg'
